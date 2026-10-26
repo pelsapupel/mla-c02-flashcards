@@ -69,7 +69,7 @@ To use an existing Chrome installation instead of downloading Chromium, set BROW
 
 ## GitHub CI/CD
 
-Work on a feature branch and open a pull request into main. GitHub Actions validates the generated app and runs the browser checks in Chromium and WebKit. The production deployment job runs only after those checks pass on main following a merge; pull requests do not publish to production.
+Work on a feature branch and open a pull request into main. GitHub Actions validates the generated app and runs the browser checks in Chromium and WebKit. The production deployment job runs only after those checks pass on main following a merge; pull requests do not publish to production. Automatic Vercel Git deployments are disabled in vercel.json so they cannot bypass the GitHub checks.
 
 The deployment job uses the Actions secrets VERCEL_TOKEN, VERCEL_ORG_ID, and VERCEL_PROJECT_ID. Secrets may be stored on the repository or its Production environment. Set VERCEL_TOKEN to a Vercel access token authorized for this project. The build and deployment use Vercel CLI 65.2.0 and verify that the live page matches the tested HTML.
 
