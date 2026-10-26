@@ -1,0 +1,15 @@
+{
+  "name": "mla-c02-flashcards",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A standalone AWS MLA-C02 flashcard study app.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/build.mjs --check",
+    "start": "node scripts/serve.mjs"
+  }
+}
