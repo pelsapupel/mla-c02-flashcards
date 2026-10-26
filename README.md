@@ -4,7 +4,18 @@ An interactive AWS Machine Learning Engineer study deck with 649 cards.
 
 [Open the hosted app](https://mla-c02-flashcards.vercel.app/)
 
-Tap a card or the Flip card button to reveal its answer. Use Previous and Next to move through the deck. On a keyboard, Space flips, arrow keys navigate, and holding Option / Alt turns the flip button into Random card.
+On a PC, click a card or the Flip card button to reveal its answer. Use Previous and Next to move through the deck. On a keyboard, Space flips, arrow keys navigate, and holding Option / Alt turns the flip button into Random card.
+
+On a phone, swipe anywhere on the study page:
+
+| Gesture | Action |
+| --- | --- |
+| One finger left | Next card |
+| One finger right | Previous card |
+| One finger up | Flip between question and answer |
+| Two fingers up | Deal a different random card |
+
+Tapping the card also flips it. Phone controls are selected from the device's primary touch-input capabilities, so narrowing a PC window keeps its buttons and keyboard controls. During phone study, the page stays fixed and does not scroll or zoom on double tap. The reading fallback remains available when JavaScript is disabled.
 
 Cards are grouped into exam basics and four study domains. The original 100 cards carry the source label *Guide from docx; the 549 course cards carry *Guide from YT course. Original DOCX cards retain their MLA-C01 exam label.
 
@@ -44,14 +55,23 @@ Check the generated page:
 
     npm run check
 
-The browser regression script checks every card, source labels, domain assignments, navigation, keyboard shortcuts, random dealing, touch controls, mobile layout, and the offline fallback.
+The browser regression scripts check every card, source labels, domain assignments, desktop navigation, keyboard shortcuts, random dealing, phone gestures, scroll and zoom prevention, mobile layout, and the offline fallback.
 
     python3 -m venv .venv
     .venv/bin/python -m pip install -r requirements-dev.txt
     .venv/bin/python -m playwright install chromium
     .venv/bin/python tests/browser.py
+    .venv/bin/python tests/mobile_gestures.py
+
+Set BROWSER_ENGINE=webkit to run the same checks with WebKit after installing it with Playwright.
 
 To use an existing Chrome installation instead of downloading Chromium, set BROWSER_EXECUTABLE to its executable path before running the browser script.
+
+## GitHub CI/CD
+
+Work on a feature branch and open a pull request into main. GitHub Actions validates the generated app and runs the browser checks in Chromium and WebKit. The production deployment job runs only after those checks pass on main following a merge; pull requests do not publish to production. Automatic Vercel Git deployments are disabled in vercel.json so they cannot bypass the GitHub checks.
+
+The deployment job uses the Actions secrets VERCEL_TOKEN, VERCEL_ORG_ID, and VERCEL_PROJECT_ID. Secrets may be stored on the repository or its Production environment. Set VERCEL_TOKEN to a Vercel access token authorized for this project. The build and deployment use Vercel CLI 65.2.0 and verify that the live page matches the tested HTML.
 
 ## Deploy to Vercel
 
