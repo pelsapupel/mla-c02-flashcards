@@ -26,7 +26,7 @@ try:
     url = line.removeprefix("Flashcards: ")
     executable = os.environ.get("BROWSER_EXECUTABLE")
     with sync_playwright() as p:
-        browser = p.chromium.launch(
+        browser = getattr(p, os.environ.get("BROWSER_ENGINE", "chromium")).launch(
             headless=True, **({"executable_path": executable} if executable else {})
         )
         page = browser.new_page(viewport={"width": 1280, "height": 900})
@@ -117,12 +117,10 @@ try:
         touch.wait_for_function("document.documentElement.classList.contains('deck-ready')")
         touch.locator("#card").tap()
         check(touch.evaluate("flipped"), "touch flips card")
-        touch.locator("#nextBtn").tap()
-        check(touch.evaluate("idx===1 && !flipped"), "touch next")
-        touch.locator("#prevBtn").tap()
-        check(touch.evaluate("idx===0"), "touch previous")
-        touch.locator("#flipBtn").tap()
-        check(touch.evaluate("flipped"), "touch flip button")
+        check(touch.locator("html").get_attribute("class").find("phone-mode") >= 0, "phone input detected")
+        check(not touch.locator(".controls").is_visible(), "phone uses gesture controls")
+        touch.locator("#card").tap()
+        check(touch.evaluate("!flipped"), "touch tap closes answer")
         mobile.close()
         fallback = browser.new_context(
             java_script_enabled=False, offline=True, **p.devices["iPhone 13"]
